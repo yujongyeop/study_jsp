@@ -6,10 +6,13 @@ import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.jasper.tagplugins.jstl.core.If;
 
 @WebServlet("/calc2")
 public class calc2 extends HttpServlet {
@@ -19,7 +22,8 @@ public class calc2 extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 //		ServletContext application = request.getServletContext(); application
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
+		Cookie[] cookies = request.getCookies();
 		String v_ = request.getParameter("v");
 		String op = request.getParameter("button");
 		int v = 0;
@@ -29,10 +33,23 @@ public class calc2 extends HttpServlet {
 		// 계산
 		if (op.equals("=")) {
 //			int x = (Integer) application.getAttribute("value");
-			int x = (Integer) session.getAttribute("value");
+//			int x = (Integer) session.getAttribute("value");
+			int x = 0;
+			for (Cookie c : cookies)
+				if (c.getName().equals("value")) {
+					x = Integer.parseInt(c.getValue());
+					break;
+				}
+
 			int y = v;
-			String operator = (String) session.getAttribute("op");
 //			String operator = (String) application.getAttribute("op");
+//			String operator = (String) session.getAttribute("op");
+			String operator = "";
+			for (Cookie c : cookies)
+				if (c.getName().equals("op")) {
+					operator = c.getValue();
+					break;
+				}
 			if (operator.equals("+")) {
 				result = x + y;
 			} else {
@@ -44,8 +61,15 @@ public class calc2 extends HttpServlet {
 		else {
 //			application.setAttribute("value", v);
 //			application.setAttribute("op", op);
-			session.setAttribute("value", v);
-			session.setAttribute("op", op);
+//			session.setAttribute("value", v);
+//			session.setAttribute("op", op);
+			Cookie vauleCookie = new Cookie("value", String.valueOf(v));
+			Cookie opCookie = new Cookie("op", op);
+			vauleCookie.setPath("/calc2");
+			opCookie.setPath("/calc2");
+			response.addCookie(vauleCookie);
+			response.addCookie(opCookie);
+			response.sendRedirect("calc2.html");
 		}
 	}
 }
