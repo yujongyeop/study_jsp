@@ -16,15 +16,13 @@ public class add2 extends HttpServlet {
 			throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
-		String x_ = request.getParameter("x");
-		String y_ = request.getParameter("y");
-		int x = 0;
-		int y = 0;
-		if (x_ != null)
-			x = Integer.parseInt(x_);
-		if (y_ != null)	
-			y = Integer.parseInt(y_);
-		int result = x + y;
-		response.getWriter().printf("result is " + result);
+		int result = 0;
+		String[] num_ = request.getParameterValues("num");
+		for (int i = 0; i < num_.length; i++) {
+			int num = Integer.parseInt(num_[i]);
+			result += num;
+		}
+		PrintWriter out = response.getWriter();
+		out.print(result);
 	}
 }
