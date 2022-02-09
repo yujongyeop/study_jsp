@@ -1,6 +1,8 @@
 package com.study.web;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -24,6 +26,12 @@ public class spag extends HttpServlet {
 		else
 			result = "짝수";
 		request.setAttribute("result", result);
+		String[] names = { "1", "2" };
+		request.setAttribute("names", names);
+		Map<String, Object> notice = new HashMap<String, Object>();
+		notice.put("id", 1);
+		notice.put("title", "EL");
+		request.setAttribute("notice", notice);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("spag.jsp");
 		dispatcher.forward(request, response);
 	}

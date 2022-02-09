@@ -8,6 +8,8 @@
 </head>
 <body>
 	<%=request.getAttribute("result")%>입니다.
+	${names[1]}
+	${notice.title}
 	<div>
 		<form></form>
 	</div>
